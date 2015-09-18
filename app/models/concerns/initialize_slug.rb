@@ -1,16 +1,26 @@
 module InitializeSlug
-  def generate_slug(field_translation, array_translations)
+  def generate_slug(array_translations)
     array_translations.each do |translation|
-      slug = translation.slug
-      if slug.blank?
-        slug = 'needs-to-be-changed'
-
-        unless field_translation.blank?
-          if !translation[field_translation].blank?
-            slug = translation[field_translation]
-          elsif array_translations.any? && !array_translations.first[field_translation].blank?
-            slug = array_translations.first[field_translation]
-          end
+      if translation.class == CategoryTranslation
+        if CategoryTranslation.where("name like '%#{translation.name}%'").exists?
+          num_coincidences = CategoryTranslation.where("name like '%#{translation.name}%'").size
+          slug = "#{translation.name}_#{num_coincidences}"
+        else
+          slug = translation.name
+        end
+      elsif translation.class == ProductTranslation
+        if ProductTranslation.where("name like '%#{translation.name}%'").exists?
+          num_coincidences = ProductTranslation.where("name like '%#{translation.name}%'").size
+          slug = "#{translation.name}_#{num_coincidences}"
+        else
+          slug = translation.name
+        end
+      elsif translation.class == TagTranslation
+        if TagTranslation.where("name like '%#{translation.name}%'").exists?
+          num_coincidences = TagTranslation.where("name like '%#{translation.name}%'").size
+          slug = "#{translation.name}_#{num_coincidences}"
+        else
+          slug = translation.name
         end
       end
 

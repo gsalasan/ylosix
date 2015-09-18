@@ -181,6 +181,6 @@ class Product < ActiveRecord::Base
   def set_defaults
     self.publication_date ||= Time.now
 
-    generate_slug(:name, product_translations)
+    generate_slug(product_translations)
   end
 end

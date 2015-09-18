@@ -90,6 +90,6 @@ class Category < ActiveRecord::Base
   private
 
   def set_defaults
-    generate_slug(:name, category_translations)
+    generate_slug(category_translations)
   end
 end

@@ -46,17 +46,21 @@ class ProductTest < ActiveSupport::TestCase
   test 'set_defaults' do
     pr = Product.new(name: 'potato with spaces')
     assert pr.save
-    assert !pr.publication_date.blank?
+    pr1 = Product.new(name: 'potato with spaces')
+    assert pr1.save
+    assert pr.slug != pr1.slug
+
+    pt = ProductTranslation.new(name: 'potato with spaces', locale: :en, slug: 'potato')
+    pr = Product.new(product_translations: [pt])
+    assert pr.save
+    pr1 = Product.new(product_translations: [pt])
+    assert pr1.save
+    assert pr.slug != pr1.slug
 
     pr.product_translations.each do |translation|
       assert !translation.slug.blank?
     end
-
-    pt = ProductTranslation.new(name: 'potato with spaces', locale: :en)
-    pr = Product.new(product_translations: [pt])
-    assert pr.save
-
-    pr.product_translations.each do |translation|
+    pr1.product_translations.each do |translation|
       assert !translation.slug.blank?
     end
   end

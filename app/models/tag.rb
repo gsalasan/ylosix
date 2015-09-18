@@ -40,6 +40,6 @@ class Tag < ActiveRecord::Base
   private
 
   def set_defaults
-    generate_slug(:name, tag_translations)
+    generate_slug(tag_translations)
   end
 end
